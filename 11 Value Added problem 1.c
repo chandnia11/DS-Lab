@@ -1,63 +1,67 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct node {
+// Node structure
+struct Node {
     int data;
-    struct node *left, *right;
+    struct Node* left;
+    struct Node* right;
 };
-struct node* createNode(int data) {
-    struct node* newNode = (struct node*)malloc(sizeof(struct node));
-    newNode->data = data;
-    newNode->left = newNode->right = NULL;
-    return newNode;
+
+// Create new node
+struct Node* newNode(int val) {
+    struct Node* node = (struct Node*)malloc(sizeof(struct Node));
+    node->data = val;
+    node->left = node->right = NULL;
+    return node;
 }
 
-struct node* insert(struct node* root, int data) {
+// Insert into BST
+struct Node* insert(struct Node* root, int val) {
     if (root == NULL)
-        return createNode(data);
+        return newNode(val);
 
-    if (data < root->data)
-        root->left = insert(root->left, data);
+    if (val < root->data)
+        root->left = insert(root->left, val);
     else
-        root->right = insert(root->right, data);
+        root->right = insert(root->right, val);
 
     return root;
 }
 
-void printInRange(struct node* root, int low, int high) {
-    if (root == NULL)
-        return;
+// Print elements in range
+void findInRange(struct Node* root, int low, int high) {
+    if (root == NULL) return;
 
     if (root->data > low)
-        printInRange(root->left, low, high);
+        findInRange(root->left, low, high);
 
     if (root->data >= low && root->data <= high)
         printf("%d ", root->data);
 
     if (root->data < high)
-        printInRange(root->right, low, high);
+        findInRange(root->right, low, high);
 }
 
+// Main function
 int main() {
-    printf("Name: Chandni Amesar PRN: 25070521218 Batch: 2025-29\n");
+    struct Node* root = NULL;
 
-    struct node* root = NULL;
-    int n, val, low, high;
+    // Your details printed in one line
+    printf("Name: Chandni Amesar PRN: 25070521218 Batch: D2\n\n");
 
-    printf("Enter number of nodes: ");
-    scanf("%d", &n);
+    // Creating BST
+    root = insert(root, 10);
+    insert(root, 5);
+    insert(root, 15);
+    insert(root, 3);
+    insert(root, 7);
+    insert(root, 18);
 
-    printf("Enter elements:\n");
-    for (int i = 0; i < n; i++) {
-        scanf("%d", &val);
-        root = insert(root, val);
-    }
+    int low = 7, high = 15;
 
-    printf("Enter range (low high): ");
-    scanf("%d %d", &low, &high);
-
-    printf("Elements in range: ");
-    printInRange(root, low, high);
+    printf("Elements in range [%d, %d]: ", low, high);
+    findInRange(root, low, high);
 
     return 0;
 }

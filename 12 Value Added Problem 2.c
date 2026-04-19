@@ -1,58 +1,57 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
-#define MAX 1000
-
-char stack[MAX];
-int top = -1;
-
-void push(char c) {
-    stack[++top] = c;
-}
-
-
-char pop() {
-    if (top == -1)
-        return '#';
-    return stack[top--];
-}
-
-
-int isMatching(char open, char close) {
+// Function to check if brackets match
+int isMatchingPair(char open, char close) {
     if (open == '(' && close == ')') return 1;
     if (open == '{' && close == '}') return 1;
     if (open == '[' && close == ']') return 1;
     return 0;
 }
 
+// Function to check balanced expression
+int isBalanced(char* s) {
+    int n = strlen(s);
+    char* stack = (char*)malloc(n * sizeof(char));
+    int top = -1;
 
-int isBalanced(char expr[]) {
-    for (int i = 0; i < strlen(expr); i++) {
-        char ch = expr[i];
+    for (int i = 0; i < n; i++) {
+        char ch = s[i];
 
+        // Opening brackets
         if (ch == '(' || ch == '{' || ch == '[') {
-            push(ch);
-        } else {
-            char popped = pop();
-            if (!isMatching(popped, ch))
+            stack[++top] = ch;
+        }
+        // Closing brackets
+        else {
+            if (top == -1) return 0; // no matching opening
+
+            if (isMatchingPair(stack[top], ch)) {
+                top--; // pop
+            } else {
                 return 0;
+            }
         }
     }
 
+    // If stack is empty → balanced
     return (top == -1);
 }
 
 int main() {
-    printf("Name: Chandni Amesar PRN: 25070521218 Batch: 2025-29\n");
+    char s[100000];
 
-    char expr[1000];
+    // Your details (single printf)
+    printf("Name: Chandni Amesar PRN: 25070521218 Batch: D2\n\n");
 
     printf("Enter expression: ");
-    scanf("%s", expr);
+    scanf("%s", s);
 
-    if (isBalanced(expr))
-        printf("true\n");
+    if (isBalanced(s))
+        printf("Balanced Expression\n");
     else
-        printf("false\n");
+        printf("Not Balanced Expression\n");
 
     return 0;
+}
